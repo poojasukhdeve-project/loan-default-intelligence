@@ -1,0 +1,31 @@
+{
+  "model_type": "LogisticRegression",
+  "target": "default",
+  "positive_class": 1,
+  "cutoff_date": "2016-01-01",
+  "numeric_features": [
+    "loan_amnt",
+    "annual_inc",
+    "dti",
+    "fico_range_low",
+    "fico_range_high",
+    "delinq_2yrs",
+    "inq_last_6mths",
+    "open_acc",
+    "pub_rec",
+    "revol_bal",
+    "revol_util",
+    "total_acc"
+  ],
+  "categorical_features": [
+    "term",
+    "emp_length",
+    "home_ownership",
+    "verification_status",
+    "purpose"
+  ],
+  "training_rows": 826604,
+  "testing_rows": 518706,
+  "roc_auc": 0.6868214234229373,
+  "average_precision": 0.3782615748392535
+}

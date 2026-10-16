@@ -1,0 +1,30 @@
+{
+  "model_type": "LogisticRegression",
+  "dataset": "mature_loan_sample.csv",
+  "cutoff_date": "2013-01-01",
+  "training_rows": 93153,
+  "testing_rows": 396032,
+  "roc_auc": 0.6454591111463284,
+  "average_precision": 0.21870311326752412,
+  "numeric_features": [
+    "loan_amnt",
+    "annual_inc",
+    "dti",
+    "fico_range_low",
+    "fico_range_high",
+    "delinq_2yrs",
+    "inq_last_6mths",
+    "open_acc",
+    "pub_rec",
+    "revol_bal",
+    "revol_util",
+    "total_acc"
+  ],
+  "categorical_features": [
+    "term",
+    "emp_length",
+    "home_ownership",
+    "verification_status",
+    "purpose"
+  ]
+}

@@ -1,0 +1,30 @@
+
+FINAL TEST REPORT — BEST CANDIDATE
+==================================
+
+Test rows: 396,032
+Observed default rate: 14.1713%
+Threshold: 0.55
+
+ROC-AUC: 0.6146
+Average precision: 0.1946
+Accuracy: 0.6720
+Precision: 0.1971
+Recall: 0.4276
+F1 score: 0.2698
+Brier score: 0.2471
+
+True negatives: 242,139
+False positives: 97,770
+False negatives: 32,127
+True positives: 23,996
+
+              precision    recall  f1-score   support
+
+  Fully Paid       0.88      0.71      0.79    339909
+ Charged Off       0.20      0.43      0.27     56123
+
+    accuracy                           0.67    396032
+   macro avg       0.54      0.57      0.53    396032
+weighted avg       0.79      0.67      0.71    396032
+
