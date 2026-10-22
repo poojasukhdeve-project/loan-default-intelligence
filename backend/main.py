@@ -1,5 +1,6 @@
-
+from shap_explainer import explain_prediction
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from risk_scoring import predict_loan
@@ -8,6 +9,18 @@ app = FastAPI(
     title="Loan Default Intelligence API",
     description="Loan default risk and expected-loss estimation",
     version="1.0.0",
+)
+
+# Allow your React frontend to communicate with FastAPI
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -39,6 +52,18 @@ def root():
 @app.post("/predict")
 def predict(application: LoanApplication):
     try:
-        return predict_loan(application.model_dump())
+        inputs = application.model_dump()
+        result = predict_loan(inputs)
+
+        factors = explain_prediction(inputs)
+        result["top_factors"] = factors
+
+        return result
+
     except (ValueError, FileNotFoundError) as exc:
         raise HTTPException(status_code=400, detail=str(exc))
+    except Exception as exc:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Prediction or SHAP explanation failed: {exc}",
+        )
