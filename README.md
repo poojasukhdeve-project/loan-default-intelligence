@@ -1,4 +1,4 @@
-# Loan Default Intelligence — React + TypeScript + FastAPI
+# Loan Default Intelligence - React + TypeScript + FastAPI
 
 A navy-and-white credit-risk scorecard UI inspired by the supplied reference. It includes an applicant form, custom 300–900 display score, estimated default probability, expected-loss tile, SHAP-ready factor list, adverse-action-reason placeholder, and plain-English explanation section.
 
