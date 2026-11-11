@@ -6,18 +6,6 @@ An AI-powered credit-risk scorecard built with **React, TypeScript and FastAPI**
 
 ---
 
-## Screenshots
-
-Add your screenshots to a `docs/` folder and link them here:
-
-| Step 1: Credit Scores | Step 2: Applicant | Step 3: Loan Details |
-|---|---|---|
-| `docs/step1.png` | `docs/step2.png` | `docs/step3.png` |
-
-| Step 4: Stability | Results: Credit Risk Analysis |
-|---|---|
-| `docs/step4.png` | `docs/results.png` |
-
 ## Features
 
 - **Four-step application form:** Credit Scores, Applicant Profile, Loan Details and Stability Indicators, with a progress tracker and validation.
