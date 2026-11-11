@@ -1,14 +1,36 @@
-# Loan Default Intelligence - React + TypeScript + FastAPI
+Loan Default Intelligence
 
-A navy-and-white credit-risk scorecard UI inspired by the supplied reference. It includes an applicant form, custom 300–900 display score, estimated default probability, expected-loss tile, SHAP-ready factor list, adverse-action-reason placeholder, and plain-English explanation section.
+A full-stack credit-risk scorecard prototype built with React, TypeScript and FastAPI. Enter an applicant's details and the app shows a custom 300–900 display score, an estimated default probability, an expected-loss figure, a factor breakdown and a plain-English explanation.
 
-## Important model caveat
+Project status: prototype / demo. The bundled API uses a demo heuristic to validate the frontend-backend wiring. It is not trained on LendingClub data, it is not a bureau score, and it must not be used to make lending decisions. See Model status for details and Roadmap for how to connect a real model.
 
-The bundled API is a **demo heuristic** used only to validate frontend/backend wiring. It is not trained on LendingClub data, not a bureau score, and must not be used to make lending decisions. The initial result shown in the UI is also illustrative. The UI-only bureau/age/region fields are intentionally not sent to the LendingClub endpoint. Before using real predictions, define the target and time split, train/calibrate a model, align API features with the fitted pipeline, generate SHAP values from that model, and validate performance and fairness.
+Features
+Applicant form for loan and borrower inputs
+Custom 300–900 display score (a project score, not a FICO, CIBIL or Experian score)
+Estimated default probability and expected-loss tile
+SHAP-ready factor list, shaped to accept real per-feature contributions once a trained model is connected
+Adverse-action reason placeholder (needs legal review before any real use)
+Plain-English explanation section for non-technical readers
+FastAPI backend with auto-generated docs, a health endpoint and pytest tests
+Docker support for the API
+Tech stack
+Layer	Tools
+Frontend	React, TypeScript, Vite
+Backend	Python, FastAPI, Uvicorn
+Testing	pytest
+Deployment	Docker, Docker Compose
+Model status
+Item	Status
+Frontend UI and API wiring	Working
+Scoring logic	Demo heuristic only
+Trained on LendingClub data	No
+Real SHAP values	No (the factor list is a placeholder)
+Probability calibration and validation	Not done
+Fairness review	Not done
 
-## Folder structure
+The initial result shown in the UI is illustrative. The UI-only bureau, age and region fields are intentionally not sent to the LendingClub endpoint.
 
-```text
+Project structure
 loan-default-intelligence/
 ├── frontend/
 │   ├── .env.example
@@ -31,66 +53,64 @@ loan-default-intelligence/
 │   └── tests/test_api.py
 ├── docker-compose.yml
 └── README.md
-```
-
-## Run locally in VS Code
-
-### 1. Start the API
-
-```bash
+Getting started
+Prerequisites
+Python 3.10+
+Node.js 18+ and npm
+Docker (optional)
+1. Start the API
+bash
 cd backend
 python -m venv .venv
-# Windows PowerShell: .venv\\Scripts\\Activate.ps1
-# macOS/Linux: source .venv/bin/activate
+# Windows PowerShell: .venv\Scripts\Activate.ps1
+# macOS/Linux:        source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
-```
-
-Open http://127.0.0.1:8000/docs to inspect the API. Health endpoint: http://127.0.0.1:8000/health.
-
-### 2. Start the React UI in a second terminal
-
-```bash
+API docs: http://127.0.0.1:8000/docs
+Health check: http://127.0.0.1:8000/health
+2. Start the React UI (second terminal)
+bash
 cd frontend
 npm install
-# Optional: copy .env.example to .env.local and set VITE_API_BASE_URL=http://127.0.0.1:8000
+# Optional: copy .env.example to .env.local and set
+# VITE_API_BASE_URL=http://127.0.0.1:8000
 npm run dev
-```
 
-Open the Vite URL printed in the terminal, normally http://localhost:5173.
+Open the URL printed by Vite, normally http://localhost:5173.
 
-### 3. Run backend tests
+3. Run the tests
 
-From `backend/` with the virtual environment active:
+From backend/ with the virtual environment active:
 
-```bash
+bash
 pytest -q
-```
-
-### 4. Run API with Docker
+4. Run the API with Docker
 
 From the repository root:
 
-```bash
+bash
 docker compose up --build
-```
 
-The API runs on port 8000. Run the frontend separately with `npm run dev`, or add a frontend container for a full containerized deployment.
+The API runs on port 8000. Run the frontend separately with npm run dev, or add a frontend container for a fully containerized setup.
 
-## Connect a real LendingClub model
+Roadmap: connecting a real model
+Choose the data. Select a public LendingClub loan-performance dataset and verify its license and target definition.
+Define the target. Fix the prediction point and target (for example, charged-off versus fully paid). Exclude records whose outcome would not be known at prediction time.
+Split by time. Split by issue date, not only randomly, to reduce temporal leakage.
+Train a pipeline. Build a preprocessing and classification pipeline. Save the exact ordered feature list and categorical mappings in a versioned artifact.
+Calibrate and evaluate. Calibrate probabilities on a validation set. Report ROC-AUC, PR-AUC, Brier score, calibration, recall at the chosen threshold and subgroup performance.
+Replace the heuristic. Swap the logic in backend/app/main.py for the saved pipeline's predict_proba, and make sure request fields and preprocessing match training exactly.
+Add real SHAP. Compute SHAP values from the same fitted model and return the actual per-feature contributions. Do not label coefficients or heuristics as SHAP.
+Document the score mapping. The starter mapping is illustrative. A 300–900 score here is a custom project score, not a bureau score.
+Review adverse-action logic. Have reason codes reviewed legally before presenting them as compliant with any lending regulation.
+Deployment
+Frontend: deploy frontend/ to Vercel or Netlify and set VITE_API_BASE_URL to your deployed API URL.
+API: deploy backend/ to Render, Railway, Fly.io or any container host. Restrict CORS to your frontend domain in production.
+Before real users: add authentication, rate limits, controlled request logging, monitoring and a data-retention policy. Never commit secrets or applicant personal data.
+Disclaimer
 
-1. Select a public LendingClub loan-performance dataset and verify its license and target definition.
-2. Define the prediction point and target (for example, default/charged-off versus fully paid); exclude records whose outcome would not be known at prediction time.
-3. Split by issue date rather than random-only split to reduce temporal leakage.
-4. Train a preprocessing + classification pipeline. Keep the exact ordered feature list and categorical mappings in a versioned artifact.
-5. Calibrate probabilities on a validation set; evaluate ROC-AUC, PR-AUC, Brier score, calibration, recall at an operating threshold, and subgroup performance.
-6. Replace the heuristic in `backend/app/main.py` with the saved pipeline's `predict_proba`. Ensure request fields and preprocessing match training exactly.
-7. Compute SHAP explanations from the same fitted model and return actual per-feature contributions. Do not label arbitrary coefficients/heuristics as SHAP.
-8. Document score mapping explicitly. The starter mapping is illustrative; a 300–900 score is a custom project score, not a FICO/CIBIL/Experian score.
-9. Use legally reviewed adverse-action reason logic before presenting any reason as compliant with a lending regulation.
+This project is for learning and demonstration only. Scores, probabilities and explanations it produces are illustrative and are not financial, credit or legal advice. Do not use it to approve, deny or price credit.
 
-## Deployment outline
+License
 
-- Frontend: deploy `frontend/` to Vercel or Netlify; configure `VITE_API_BASE_URL` to your deployed API URL.
-- API: deploy `backend/` to Render, Railway, Fly.io, or a container host; configure production CORS for your frontend domain only.
-- Never commit secrets or applicant personal data. Add authentication, rate limits, request logging controls, monitoring, and data-retention policy before accepting real users.
+Add a license of your choice (for example, MIT) before sharing publicly.
