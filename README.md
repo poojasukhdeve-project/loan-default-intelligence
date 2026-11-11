@@ -194,7 +194,3 @@ Download the LendingClub accepted-loans file, place it in `backend/data/`, then 
 ## Disclaimer
 
 This project is for learning and demonstration only. Scores, probabilities and explanations are illustrative and are not financial, credit or legal advice.
-
-## License
-
-Add a license of your choice (for example, MIT) before sharing publicly.
